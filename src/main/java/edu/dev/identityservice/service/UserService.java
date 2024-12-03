@@ -16,6 +16,10 @@ public class UserService {
 	private UserRepository userRepository;
 
 	public User createUser(UserCreationRequest request) {
+		if (userRepository.existsByUsername(request.getUsername())) {
+			throw new RuntimeException("User already existed");
+		}
+
 		User user = new User();
 
 		user.setUsername(request.getUsername());
@@ -29,15 +33,15 @@ public class UserService {
 
 	public User updateUser(String userId, UserUpdateRequest request) {
 		User user = getUser(userId);
-		
+
 		user.setPassword(request.getPassword());
 		user.setFirstName(request.getFirstName());
 		user.setLastName(request.getLastName());
 		user.setDob(request.getDob());
-		
+
 		return userRepository.save(user);
 	}
-	
+
 	public void deleteUser(String userId) {
 		userRepository.deleteById(userId);
 	}
