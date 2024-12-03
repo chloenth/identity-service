@@ -1,0 +1,77 @@
+# Compiled source
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Maven-specific files
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+dependency-reduced-pom.xml
+
+# Gradle specific files
+.gradle/
+build/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+*.class
+
+# Eclipse files
+.project
+.classpath
+.settings/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# Runtime files
+*.pid
+
+# Temporary files
+*.tmp
+
+# Sensitive files
+application.properties
+application.yaml
+*.keystore
+
+# Test coverage results
+coverage/
+
+# Generated files
+*.war
+*.jar
+
+# Other
+.env
+HELP.md
