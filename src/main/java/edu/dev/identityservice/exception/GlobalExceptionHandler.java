@@ -11,7 +11,7 @@ import edu.dev.identityservice.dto.response.ApiResponse;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(value = Exception.class)
-	ResponseEntity<ApiResponse<?>> handlingRuntimeException(Exception exception) {
+	ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
 		ApiResponse<?> apiResponse = new ApiResponse<>();
 
 		apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());

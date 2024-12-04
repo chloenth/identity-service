@@ -40,7 +40,7 @@ public class UserService {
 	}
 
 	public UserResponse updateUser(String userId, UserUpdateRequest request) {
-		User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+		User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
 		userMapper.updateUser(user, request);
 		User updatedUser = userRepository.save(user);
@@ -57,7 +57,7 @@ public class UserService {
 	}
 
 	public UserResponse getUser(String id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+		User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
 		return userMapper.toUserResponse(user);
 	}
