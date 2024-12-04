@@ -5,7 +5,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import edu.dev.identityservice.dto.request.ApiResponse;
+import edu.dev.identityservice.dto.response.ApiResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

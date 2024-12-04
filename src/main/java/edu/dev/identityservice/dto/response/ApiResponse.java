@@ -1,4 +1,4 @@
-package edu.dev.identityservice.dto.request;
+package edu.dev.identityservice.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

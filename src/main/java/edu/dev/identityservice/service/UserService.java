@@ -2,6 +2,8 @@ package edu.dev.identityservice.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.dev.identityservice.dto.request.UserCreationRequest;
@@ -30,6 +32,10 @@ public class UserService {
 		}
 
 		User user = userMapper.toUser(request);
+
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
+
 		return userRepository.save(user);
 	}
 

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.dev.identityservice.dto.request.ApiResponse;
 import edu.dev.identityservice.dto.request.UserCreationRequest;
 import edu.dev.identityservice.dto.request.UserUpdateRequest;
+import edu.dev.identityservice.dto.response.ApiResponse;
 import edu.dev.identityservice.dto.response.UserResponse;
 import edu.dev.identityservice.entity.User;
 import edu.dev.identityservice.service.UserService;
