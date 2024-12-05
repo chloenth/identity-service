@@ -4,13 +4,13 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.StringJoiner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -28,6 +28,7 @@ import edu.dev.identityservice.dto.request.AuthenticationRequest;
 import edu.dev.identityservice.dto.request.IntrospectRequest;
 import edu.dev.identityservice.dto.response.AuthenticationResponse;
 import edu.dev.identityservice.dto.response.IntrospectResponse;
+import edu.dev.identityservice.entity.User;
 import edu.dev.identityservice.exception.AppException;
 import edu.dev.identityservice.exception.ErrorCode;
 import edu.dev.identityservice.repository.UserRepository;
@@ -35,8 +36,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
@@ -47,8 +50,6 @@ public class AuthenticationService {
 	@NonFinal
 	@Value("${jwt.signerKey}")
 	protected String SIGNER_KEY;
-
-	private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
 	public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
 		var token = request.getToken();
@@ -76,17 +77,17 @@ public class AuthenticationService {
 			throw new AppException(ErrorCode.UNAUTHENTICATED);
 		}
 
-		var token = generateToken(request.getUsername());
+		var token = generateToken(user);
 
 		return AuthenticationResponse.builder().token(token).authenticated(true).build();
 	}
 
-	private String generateToken(String username) {
+	private String generateToken(User user) {
 		JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
-		JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(username).issuer("edu.dev").issueTime(new Date())
-				.expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-				.claim("customClaim", "Custom").build();
+		JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(user.getUsername()).issuer("edu.dev")
+				.issueTime(new Date()).expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+				.claim("scope", buildScope(user)).build();
 
 		Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
@@ -108,4 +109,15 @@ public class AuthenticationService {
 
 		}
 	}
+
+	private String buildScope(User user) {
+		StringJoiner stringJoiner = new StringJoiner(" ");
+
+		if (!CollectionUtils.isEmpty(user.getRoles())) {
+			user.getRoles().forEach(stringJoiner::add);
+		}
+
+		return stringJoiner.toString();
+	}
+
 }
