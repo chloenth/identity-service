@@ -47,13 +47,13 @@ public class UserController {
 		var authentication = SecurityContextHolder.getContext().getAuthentication();
 		log.info("Username: {}", authentication.getName());
 		authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-		
+
 		return ApiResponse.<List<UserResponse>>builder().result(userService.getUsers()).build();
 	}
 
-	@GetMapping("/{userId}")
-	UserResponse getUser(@PathVariable String userId) {
-		return userService.getUser(userId);
+	@GetMapping("/myInfo")
+	ApiResponse<UserResponse> getMyInfo() {
+		return ApiResponse.<UserResponse>builder().result(userService.getMyInfo()).build();
 	}
 
 	@PutMapping("/{userId}")
