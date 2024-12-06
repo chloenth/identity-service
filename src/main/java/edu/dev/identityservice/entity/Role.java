@@ -2,6 +2,8 @@ package edu.dev.identityservice.entity;
 
 import java.util.Set;
 
+import org.hibernate.annotations.BatchSize;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -33,5 +35,6 @@ public class Role {
 		joinColumns = @JoinColumn(name = "role_id"), 
 		inverseJoinColumns = @JoinColumn(name = "permission_id")
 	)
+	@BatchSize(size = 10)
 	Set<Permission> permissions;
 }

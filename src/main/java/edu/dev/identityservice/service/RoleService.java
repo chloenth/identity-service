@@ -36,7 +36,7 @@ public class RoleService {
 	}
 
 	public List<RoleResponse> getAll() {
-		var roles = roleRepository.findAllRolesWithPermissions();
+		var roles = roleRepository.findAll();
 		return roles.stream().map(roleMapper::toRoleResponse).toList();
 	}
 	

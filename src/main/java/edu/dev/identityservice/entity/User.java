@@ -3,6 +3,8 @@ package edu.dev.identityservice.entity;
 import java.time.LocalDate;
 import java.util.Set;
 
+import org.hibernate.annotations.BatchSize;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,6 +43,7 @@ public class User {
 				joinColumns = @JoinColumn(name="user_id"),
 				inverseJoinColumns = @JoinColumn(name="role_id")
 			)
+	@BatchSize(size = 10)
 	Set<Role> roles;
 
 }
