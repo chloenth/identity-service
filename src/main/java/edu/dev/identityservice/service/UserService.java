@@ -13,10 +13,10 @@ import edu.dev.identityservice.dto.request.UserCreationRequest;
 import edu.dev.identityservice.dto.request.UserUpdateRequest;
 import edu.dev.identityservice.dto.response.UserResponse;
 import edu.dev.identityservice.entity.User;
-import edu.dev.identityservice.enums.Role;
 import edu.dev.identityservice.exception.AppException;
 import edu.dev.identityservice.exception.ErrorCode;
 import edu.dev.identityservice.mapper.UserMapper;
+import edu.dev.identityservice.repository.RoleRepository;
 import edu.dev.identityservice.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 
 	UserRepository userRepository;
+	RoleRepository roleRepository;
 	UserMapper userMapper;
 	PasswordEncoder passwordEncoder;
 
@@ -41,10 +42,9 @@ public class UserService {
 		User user = userMapper.toUser(request);
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-		HashSet<String> roles = new HashSet<>();
-		roles.add(Role.USER.name());
+		var roles = roleRepository.findAllById(request.getRoles());
 
-		user.setRoles(roles);
+		user.setRoles(new HashSet<>(roles));
 
 		return userRepository.save(user);
 	}
@@ -61,9 +61,12 @@ public class UserService {
 		User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
 		userMapper.updateUser(user, request);
-		User updatedUser = userRepository.save(user);
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-		return userMapper.toUserResponse(updatedUser);
+		var roles = roleRepository.findAllById(request.getRoles());
+		user.setRoles(new HashSet<>(roles));
+
+		return userMapper.toUserResponse(userRepository.save(user));
 	}
 
 	public void deleteUser(String userId) {
@@ -71,6 +74,7 @@ public class UserService {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasAuthority('APPROVE_POST')")
 	public List<UserResponse> getUsers() {
 		log.info("in method get Users");
 		return userRepository.findAll().stream().map(user -> userMapper.toUserResponse(user)).toList();

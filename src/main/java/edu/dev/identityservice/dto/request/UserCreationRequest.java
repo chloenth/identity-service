@@ -1,6 +1,7 @@
 package edu.dev.identityservice.dto.request;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -26,4 +27,6 @@ public class UserCreationRequest {
 	String firstName;
 	String lastName;
 	LocalDate dob;
+	
+	Set<String> roles;
 }
