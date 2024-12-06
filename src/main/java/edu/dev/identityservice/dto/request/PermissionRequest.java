@@ -1,6 +1,4 @@
-package edu.dev.identityservice.dto.response;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
+package edu.dev.identityservice.dto.request;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,12 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiResponse<T> {
-	
-	@Builder.Default
-	int code = 1000;
-	
-	String message;
-	T result;
+public class PermissionRequest {
+	String name;
+	String description;
 }
