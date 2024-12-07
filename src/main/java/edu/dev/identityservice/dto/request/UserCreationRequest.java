@@ -1,8 +1,8 @@
 package edu.dev.identityservice.dto.request;
 
 import java.time.LocalDate;
-import java.util.Set;
 
+import edu.dev.identityservice.validator.DobConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,8 @@ public class UserCreationRequest {
 
 	String firstName;
 	String lastName;
+
+	@DobConstraint(min = 18, message = "INVALID_DOB")
 	LocalDate dob;
-	
-	Set<String> roles;
+
 }
